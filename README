@@ -1,0 +1,77 @@
+Copyright 2017 Alan Kuhnle
+
+This file is part of mim.
+
+mim is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+mim is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with mim.  If not, see <http://www.gnu.org/licenses/>.
+
+Two programs 'mim' and 'synth' are included in this package.
+mim contains code for the algorithms ISM and KSN from the paper.
+synth is a program to generate multiplexes with Erdos Renyi layers
+in the proper format for input to mim.
+
+Compilation instructions:
+'make' compiles mim
+'make synth' compiles synth
+
+mim input and usage:
+mim takes as input a directory containing a multiplex in the following format:
+Layers of the multiplex are indexed 0,...,k-1.
+Each layer i of the multiplex has three files associated with it:
+'layeri':
+This file contains the directed graph representation for layer i
+in plain text format. The first line must contain the number of nodes followed
+by the number 1, so '10 1' for example.
+The remainder of the file is weighted edge list format, where each line contains
+<source node> <target node> <edge weight>,
+where the edge weight is an integer between 0 and 255. For the IC or LT models,
+this weight is interpreted as the fractional weight <weight> / 255.
+
+'layerimodel':
+This file contains the influence propagation model of the layer, represented as
+an integer. Currently supported values are 0 -- IC and 1 -- LT models.
+
+'layeriov':
+This file contains the overlapping information for this layer, in the following
+format. On each line,
+<node_id> <layer_id> <layer_node_id>
+are specified, where <node_id> is the id of the vertex in this layer (i),
+<layer_id> != i is the layer in which the this vertex also lies, and
+<layer_node_id> is the id of the node in this other layer. For example,
+if layer0ov contains the line
+1 3 5,
+it means that node 1 in layer 0 overlaps with node 5 in layer 3, and hence
+if node 1 is activated in layer 0, node 5 is activated in layer 3.
+
+Example usage:
+	To run ISF with 100 seeds and at most 10 threads on a multiplex in directory ./mult/:
+	./mim -M mult/ -k 100 -I -x 10
+	Same example except run alg. KSN:
+	./mim -M mult/ -k 100 -I -x 10
+	To create a synthetic multiplex with 5 ER layers, each with 100 nodes, edge prob 0.2, overlap
+	fraction 0.1 (of 100) in directory ./mult:
+	./synth 100 0.2 5 0.1 mult/
+Explanation of output:
+	mim outputs the seed set chosen, and expected activation of that set as computed
+	by 10000 MC iterations.
+
+	synth outputs multiplex files in the directory specified
+
+Options:
+For mim:
+    -M [multiplex dir]
+    -I (run ISF)
+    -K (run KSN)
+    -k [number of seeds]
+    -x [max number of threads (ISF always uses a single thread)]
+		
