@@ -57,7 +57,7 @@ Example usage:
 	To run ISF with 100 seeds and at most 10 threads on a multiplex in directory ./mult/:
 	./mim -M mult/ -k 100 -I -x 10
 	Same example except run alg. KSN:
-	./mim -M mult/ -k 100 -I -x 10
+	./mim -M mult/ -k 100 -K -x 10
 	To create a synthetic multiplex with 5 ER layers, each with 100 nodes, edge prob 0.2, overlap
 	fraction 0.1 (of 100) in directory ./mult:
 	./synth 100 0.2 5 0.1 mult/
