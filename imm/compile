@@ -1,0 +1,2 @@
+echo "g++ -O3 -std=c++0x -DDISCRETE $1.cpp sfmt/SFMT.c -o $1 -lpthread"
+g++ -O3 -std=c++0x -DDISCRETE $1.cpp sfmt/SFMT.c -o $1 -lpthread
